@@ -1,0 +1,4 @@
+include LICENSE
+include DESCRIPTION.md
+include README.md
+global-exclude *.orig *.pyc *.log
