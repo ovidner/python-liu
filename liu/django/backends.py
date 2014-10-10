@@ -29,22 +29,21 @@ class LiUStudentBackend(_LiUBackend):
     _settings = LiUStudentLDAPSettings(settings_prefix)
 
     def populate_liu_id(self, user):
-        if not user.liu_id:
+        if not hasattr(user, 'liu_id'):
             user.liu_id = LiUID.objects.create(liu_id=user.username)
             user.save()
 
-        try:
-            user.liu_id.fetch()
-        except:
-            # TODO: Really handle errors.
-            pass
+        user.liu_id.fetch()
 
         return user.liu_id
 
-    def populate_user(self, *args, **kwargs):
-        user = super(LiUStudentBackend, self).populate_user(*args, **kwargs)
+    def get_or_create_user(self, *args, **kwargs):
+        user = super(LiUStudentBackend, self).get_or_create_user(*args, **kwargs)
 
-        self.populate_liu_id(user)
+        # get_or_create_user returns a tuple as ordinary get_or_create methods, we're only interested in the first item
+        # (the actual object)
+        self.populate_liu_id(user[0])
+
         return user
 
 
