@@ -23,10 +23,7 @@ class LiUID(models.Model):
     liu_id is the only mandatory field.
     """
     liu_id = models.CharField(max_length=10, primary_key=True, verbose_name=_('LiU ID'))
-    email = models.CharField(max_length=256, blank=True, verbose_name=_('email address'))
 
-    first_name = models.CharField(max_length=256, blank=True, verbose_name=_('first name'))
-    last_name = models.CharField(max_length=256, blank=True, verbose_name=_('last name'))
     personal_number = models.CharField(max_length=11, blank=True, verbose_name=_('personal number'))
 
     barcode_number = models.CharField(max_length=32, blank=True, verbose_name=_('magnet/barcode card number'))
@@ -37,7 +34,7 @@ class LiUID(models.Model):
 
     blocked = models.NullBooleanField(verbose_name=_('blocked'))
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='student', blank=True, null=True,
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='liu_id', blank=True, null=True,
                                 verbose_name=_('user'))
 
     class Meta:
@@ -56,10 +53,6 @@ class LiUID(models.Model):
         data = client.get_student(liu_id=self.liu_id)
 
         if data:
-            self.email = data['email']
-
-            self.first_name = data['first_name']
-            self.last_name = data['last_name']
             self.personal_number = data['personal_number']
 
             self.barcode_number = data['barcode_number']
