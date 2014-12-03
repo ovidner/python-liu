@@ -15,6 +15,12 @@ class StudentUnion(models.Model):
         return self.name
 
 
+class LiUIDQuerySet(models.QuerySet):
+    def fetch(self):
+        for i in self:
+            i.fetch()
+
+
 @python_2_unicode_compatible
 class LiUID(models.Model):
     """
@@ -36,6 +42,8 @@ class LiUID(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='liu_id', blank=True, null=True,
                                 verbose_name=_('user'))
+
+    objects = LiUIDQuerySet.as_manager()
 
     class Meta:
         verbose_name = _('LiU ID')
