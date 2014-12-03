@@ -30,13 +30,16 @@ class LiUID(models.Model):
     """
     liu_id = models.CharField(max_length=10, primary_key=True, verbose_name=_('LiU ID'))
 
-    personal_number = models.CharField(max_length=11, blank=True, verbose_name=_('personal number'))
+    first_name = models.CharField(max_length=256, blank=True, verbose_name=_('first name'))
+    last_name = models.CharField(max_length=256, blank=True, verbose_name=_('last name'))
+
+    id_number = models.CharField(max_length=11, blank=True, verbose_name=_('national identification number'))
 
     barcode_number = models.CharField(max_length=32, blank=True, verbose_name=_('magnet/barcode card number'))
     rfid_number = models.CharField(max_length=32, blank=True, verbose_name=_('RFID card number'))
 
-    union = models.ForeignKey('StudentUnion', related_name='members', blank=True, null=True,
-                              verbose_name=_('student union'))
+    student_union = models.ForeignKey('StudentUnion', related_name='members', blank=True, null=True,
+                                      verbose_name=_('student union'))
 
     blocked = models.NullBooleanField(verbose_name=_('blocked'))
 
@@ -61,12 +64,15 @@ class LiUID(models.Model):
         data = client.get_student(liu_id=self.liu_id)
 
         if data:
-            self.personal_number = data['personal_number']
+            self.first_name = data['first_name']
+            self.last_name = data['last_name']
+
+            self.id_number = data['personal_number']
 
             self.barcode_number = data['barcode_number']
             self.rfid_number = data['rfid_number']
 
-            self.union = StudentUnion.objects.get_or_create(name=data['union'])[0]
+            self.student_union = StudentUnion.objects.get_or_create(name=data['union'])[0]
 
             self.blocked = data['blocked']
 
