@@ -28,24 +28,6 @@ class LiUStudentBackend(_LiUBackend):
     settings_prefix = 'LIU_STUDENT_LDAP_'
     _settings = LiUStudentLDAPSettings(settings_prefix)
 
-    def populate_liu_id(self, user):
-        if not hasattr(user, 'liu_id'):
-            user.liu_id = LiUID.objects.create(liu_id=user.username)
-            user.save()
-
-        user.liu_id.fetch()
-
-        return user.liu_id
-
-    def get_or_create_user(self, *args, **kwargs):
-        user = super(LiUStudentBackend, self).get_or_create_user(*args, **kwargs)
-
-        # get_or_create_user returns a tuple as ordinary get_or_create methods, we're only interested in the first item
-        # (the actual object)
-        self.populate_liu_id(user[0])
-
-        return user
-
 
 class LiUEmployeeBackend(_LiUBackend):
     """

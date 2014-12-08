@@ -43,9 +43,6 @@ class LiUID(models.Model):
 
     blocked = models.NullBooleanField(verbose_name=_('blocked'))
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='liu_id', blank=True, null=True,
-                                verbose_name=_('user'))
-
     objects = LiUIDQuerySet.as_manager()
 
     class Meta:
