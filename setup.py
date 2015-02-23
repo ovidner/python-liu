@@ -18,7 +18,7 @@ def read(*filenames, **kwargs):
 
 setup(
     name="liu",
-    version='1.0.0',
+    version='1.1.1',
     description=read('DESCRIPTION.md'),
     long_description=read('README.md'),
     license='The MIT License',
